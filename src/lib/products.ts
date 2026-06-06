@@ -1,13 +1,6 @@
 import jiantexImg from "@/assets/jiantex.jpg";
 import halonaImg from "@/assets/halona.jpg";
-import halona2Img from "@/assets/halona-2.jpg";
 import rikiImg from "@/assets/riki.jpg";
-
-export type Variant = {
-  size: string;
-  price: number;
-  color?: string;
-};
 
 export type Product = {
   id: string;
@@ -16,13 +9,13 @@ export type Product = {
   subtitle: string;
   description: string;
   image: string;
-  colorVariants?: { name: string; label: string; hex: string }[];
+  colorVariants?: { name: string; label: string; colors: string[] }[];
   sizes: { size: string; price: number }[];
   badge?: string;
+  fixedColor?: string; // untuk Riki yang warnanya fixed
 };
 
 // Semua harga = harga per LUSIN (12 pcs)
-// Minimal order 10 lusin total (boleh campur produk)
 export const products: Product[] = [
   {
     id: "jiantex",
@@ -34,18 +27,26 @@ export const products: Product[] = [
     image: jiantexImg,
     badge: "Best Seller",
     colorVariants: [
-      { name: "terang", label: "Warna Terang", hex: "#f4c2d4" },
-      { name: "gelap", label: "Warna Gelap", hex: "#3a2a4e" },
+      {
+        name: "muda",
+        label: "Warna Muda",
+        colors: ["Pink", "Ungu Muda", "Biru Muda", "Cream", "Peach", "Mint"],
+      },
+      {
+        name: "tua",
+        label: "Warna Tua",
+        colors: ["Hitam", "Ungu Tua", "Navy", "Maroon", "Coklat", "Abu Abu"],
+      },
     ],
     sizes: [
-      { size: "M", price: 49000 * 12 },
-      { size: "L", price: 51000 * 12 },
-      { size: "XL", price: 53000 * 12 },
-      { size: "3L", price: 59000 * 12 },
-      { size: "4L", price: 69000 * 12 },
-      { size: "5L", price: 62000 * 12 },
-      { size: "6L", price: 67000 * 12 },
-      { size: "7L", price: 69000 * 12 },
+      { size: "M",  price: 49000 },
+      { size: "L",  price: 51000 },
+      { size: "XL", price: 53000 },
+      { size: "3L", price: 59000 },
+      { size: "4L", price: 69000 },
+      { size: "5L", price: 62000 },
+      { size: "6L", price: 67000 },
+      { size: "7L", price: 69000 },
     ],
   },
   {
@@ -54,21 +55,29 @@ export const products: Product[] = [
     name: "Halona",
     subtitle: "Celana Dalam Wanita",
     description:
-      "Bahan katun premium full cut yang menutup sempurna. Tersedia pilihan warna terang (pastel) dan warna gelap (bold) untuk gaya yang sesuai seleramu.",
+      "Bahan katun premium full cut yang menutup sempurna. Pilih kategori warna muda (pastel) atau warna tua (bold) — warna dikirim sesuai stok dalam kategori yang dipilih.",
     image: halonaImg,
     badge: "Premium",
     colorVariants: [
-      { name: "terang", label: "Warna Terang", hex: "#f4b8c8" },
-      { name: "gelap", label: "Warna Gelap", hex: "#1a1a1a" },
+      {
+        name: "muda",
+        label: "Warna Muda",
+        colors: ["Pink", "Ungu Muda", "Biru Muda", "Cream", "Peach", "Mint"],
+      },
+      {
+        name: "tua",
+        label: "Warna Tua",
+        colors: ["Hitam", "Ungu Tua", "Navy", "Maroon", "Coklat", "Abu Abu"],
+      },
     ],
     sizes: [
-      { size: "L", price: 49000 * 12 },
-      { size: "XL", price: 52000 * 12 },
-      { size: "3L", price: 55000 * 12 },
-      { size: "4L", price: 58000 * 12 },
-      { size: "5L", price: 63000 * 12 },
-      { size: "6L", price: 68000 * 12 },
-      { size: "7L", price: 75000 * 12 },
+      { size: "L",  price: 49000 },
+      { size: "XL", price: 52000 },
+      { size: "3L", price: 55000 },
+      { size: "4L", price: 58000 },
+      { size: "5L", price: 63000 },
+      { size: "6L", price: 68000 },
+      { size: "7L", price: 75000 },
     ],
   },
   {
@@ -80,16 +89,15 @@ export const products: Product[] = [
       "Singlet pria katun klasik. Menyerap keringat, sejuk dipakai sepanjang hari, dan jahitan rapi yang tahan lama.",
     image: rikiImg,
     badge: "For Him",
+    fixedColor: "Putih",
     sizes: [
-      { size: "M", price: 80000 * 12 },
-      { size: "L", price: 84000 * 12 },
-      { size: "XL", price: 86000 * 12 },
-      { size: "3L", price: 93000 * 12 },
+      { size: "M",  price: 80000 },
+      { size: "L",  price: 84000 },
+      { size: "XL", price: 86000 },
+      { size: "3L", price: 93000 },
     ],
   },
 ];
-
-export const MIN_LUSIN = 10;
 
 export const formatIDR = (n: number) =>
   "Rp" + n.toLocaleString("id-ID");
@@ -110,6 +118,6 @@ export function buildWhatsAppLink(opts: {
     `Warna: ${opts.color ?? "-"}\n` +
     `Jumlah: ${opts.qty ?? 1} lusin\n` +
     `Total Harga: ${opts.total ? formatIDR(opts.total) : "-"}\n` +
-    `Mohon informasi lebih lanjut.`;
+    `Mohon informasi lebih lanjut. Terima kasih 🙏`;
   return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
 }

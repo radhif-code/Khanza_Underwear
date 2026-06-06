@@ -1,17 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { X, Minus, Plus, Trash2, MessageCircle, AlertCircle } from "lucide-react";
+import { X, Minus, Plus, Trash2, MessageCircle } from "lucide-react";
 import { useCart, cart } from "@/lib/cart-store";
-import { formatIDR, WA_NUMBER, MIN_LUSIN } from "@/lib/products";
+import { formatIDR, WA_NUMBER } from "@/lib/products";
 
 export function CartDrawer() {
   const { items, isOpen, totalLusin, totalPrice } = useCart();
 
-  const canCheckout = totalLusin >= MIN_LUSIN;
-  const remaining = MIN_LUSIN - totalLusin;
-
   const handleCheckout = () => {
-    if (!canCheckout) return;
-
     const lines = items
       .map(
         (i) =>
@@ -92,7 +87,7 @@ export function CartDrawer() {
                             <button onClick={() => cart.setQty(i.id, i.qty - 1)} className="h-7 w-7 grid place-items-center">
                               <Minus className="h-3 w-3" />
                             </button>
-                            <span className="w-8 text-center text-xs font-semibold">{i.qty} lsn</span>
+                            <span className="w-10 text-center text-xs font-semibold">{i.qty} lsn</span>
                             <button onClick={() => cart.setQty(i.id, i.qty + 1)} className="h-7 w-7 grid place-items-center">
                               <Plus className="h-3 w-3" />
                             </button>
@@ -116,29 +111,12 @@ export function CartDrawer() {
                     <span className="text-sm text-muted-foreground">Total Harga</span>
                     <span className="text-2xl font-display text-gradient-rose">{formatIDR(totalPrice)}</span>
                   </div>
-
-                  {/* Min order warning */}
-                  {!canCheckout && (
-                    <div className="flex items-start gap-2 rounded-2xl bg-amber-50 border border-amber-200 px-4 py-2.5 text-xs text-amber-700">
-                      <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                      <span>
-                        Belum bisa checkout. Tambahkan{" "}
-                        <span className="font-semibold">{remaining} lusin lagi</span> untuk memenuhi minimum order {MIN_LUSIN} lusin.
-                      </span>
-                    </div>
-                  )}
-
                   <button
                     onClick={handleCheckout}
-                    disabled={!canCheckout}
-                    className={`w-full inline-flex items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold transition ${
-                      canCheckout
-                        ? "bg-gradient-to-r from-primary to-[oklch(0.68_0.18_340)] text-primary-foreground shadow-soft hover:shadow-glow-rose cursor-pointer"
-                        : "bg-muted text-muted-foreground cursor-not-allowed opacity-60"
-                    }`}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary to-[oklch(0.68_0.18_340)] text-primary-foreground py-3.5 text-sm font-semibold shadow-soft hover:shadow-glow-rose transition cursor-pointer"
                   >
                     <MessageCircle className="h-4 w-4" />
-                    {canCheckout ? "Pesan via WhatsApp" : `Kurang ${remaining} lusin lagi`}
+                    Pesan via WhatsApp
                   </button>
                 </div>
               )}
